@@ -1,0 +1,67 @@
+// Design tokens extracted from LMS Admin Figma file
+// https://www.figma.com/design/fqihqeTLlixocuCEtJ5q1t/LMS-Admin-Prototype
+
+// Colors
+$primary-500: #2239C2;
+$primary-200: #93A0EC;
+$gray-100:    #EEEEEE;
+$gray-300:    #D4D4D4;
+$gray-400:    #B8B8B8;
+$gray-500:    #999999;
+$gray-600:    #707070;
+$gray-700:    #5C5C5C;
+$gray-800:    #3E3E3E;
+$gray-900:    #1A1A1A;
+$white:       #FFFFFF;
+$black:       #000000;
+$surface-overlay: #212121;
+
+// Typography — Roboto
+$font-family: 'Roboto', sans-serif;
+
+// h2
+$font-h2-size:    20px;
+$font-h2-weight:  500;
+$font-h2-lh:      26px;
+$font-h2-ls:      0.1px;
+
+// h3
+$font-h3-size:    16px;
+$font-h3-weight:  500;
+$font-h3-lh:      20px;
+$font-h3-ls:      0.1px;
+
+// Body / p
+$font-body-size:   14px;
+$font-body-weight: 400;
+$font-body-lh:     20px;
+$font-body-ls:     0;
+
+// Label
+$font-label-size:   14px;
+$font-label-weight: 400;
+$font-label-lh:     18px;
+$font-label-ls:     0;
+
+// Button label
+$font-btn-size:   14px;
+$font-btn-weight: 500;
+$font-btn-lh:     18px;
+$font-btn-ls:     1.25px;
+
+// Body bold
+$font-bold-size:   16px;
+$font-bold-weight: 500;
+$font-bold-lh:     24px;
+$font-bold-ls:     0;
+
+// Tabs / chips / meta
+$font-meta-size:   12px;
+$font-meta-weight: 500;
+$font-meta-lh:     1;
+$font-meta-ls:     0;
+
+// Layout
+$sidebar-width: 280px;
+$header-height: 80px;
+$tabs-height:   56px;

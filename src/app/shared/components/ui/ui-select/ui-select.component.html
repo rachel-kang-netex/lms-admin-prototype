@@ -1,0 +1,17 @@
+<div class="field">
+  <label class="field__label" *ngIf="label">{{ label }}</label>
+  <div class="field__container">
+    <select
+      class="field__select"
+      [value]="value"
+      [disabled]="isDisabled"
+      (change)="onSelect($event)"
+      (blur)="onTouched()"
+    >
+      <option *ngFor="let opt of options" [value]="opt">{{ opt }}</option>
+    </select>
+    <svg class="field__chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M7 10l5 5 5-5" stroke="#3E3E3E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</div>

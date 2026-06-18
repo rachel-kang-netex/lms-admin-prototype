@@ -1,0 +1,447 @@
+@import '../../../shared/styles/tokens';
+
+// ── Container ─────────────────────────────────────────────────────────────────
+.pathway-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #F4F4F4;
+}
+
+// ── Shared header button ──────────────────────────────────────────────────────
+.hdr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover { background: #F5F5F5; }
+}
+
+// ── Top page header ───────────────────────────────────────────────────────────
+.page-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: $white;
+  border-bottom: 1px solid #E9E9E9;
+  box-shadow: 0 2px 1.5px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+// ── Sub-header ────────────────────────────────────────────────────────────────
+.sub-header {
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: $white;
+  box-shadow: 0 2px 1.5px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: $gray-900;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 480px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  height: 40px;
+  border-radius: 50px;
+  font-family: $font-family;
+  font-size: $font-btn-size;
+  font-weight: $font-btn-weight;
+  letter-spacing: $font-btn-ls;
+  cursor: pointer;
+  border: none;
+
+  &--outline {
+    background: $white;
+    border: 1px solid $gray-400;
+    color: $gray-800;
+
+    &:hover { background: $gray-100; }
+  }
+}
+
+
+// ── Body: left menu + right container ────────────────────────────────────────
+.pathway-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+// ── Left nav sidebar (collapsible, 250px collapsed / 480px expanded) ─────────
+.pathway-menu {
+  width: 250px;
+  flex-shrink: 0;
+  background: $white;
+  border-right: 1px solid #E9E9E9;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+  padding: 8px;
+
+  &--expanded {
+    width: 480px;
+  }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    &:hover { background: rgba(0, 0, 0, 0.05); }
+  }
+
+  &__icon { flex-shrink: 0; }
+
+  &__text {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+
+    &--pathway { color: #3E3E3E; }
+    &--stage   { color: #999999; }
+    &--item    { color: #424242; }
+  }
+
+  // Pathway row (current level — gray rounded background, no border)
+  &__pathway-outer { padding-left: 0; }
+
+  &__pathway-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+
+    .pathway-menu__icon { color: #3E3E3E; }
+  }
+
+  // Stage label rows (not interactive)
+  &__stage-outer {
+    padding-left: 20px;
+    margin-top: 4px;
+  }
+
+  &__stage-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+
+    .pathway-menu__icon { color: #999999; }
+  }
+
+  // Item rows (clickable — hover pill on inner content only)
+  &__item-outer { padding-left: 40px; }
+
+  &__item-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    width: 100%;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover { background: rgba(0, 0, 0, 0.1); }
+
+    .pathway-menu__icon { color: #9E9E9E; }
+  }
+}
+
+// ── Right main container ──────────────────────────────────────────────────────
+.pathway-container {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.detail-inner {
+  padding: 32px 32px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+// ── Title row ─────────────────────────────────────────────────────────────────
+.title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.training-title {
+  font-family: $font-family;
+  font-size: 24px;
+  font-weight: 500;
+  color: $gray-900;
+  line-height: 32px;
+  margin: 0;
+}
+
+.see-pathway-link {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: $font-family;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.25px;
+  color: $primary-500;
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: nowrap;
+
+  &:hover { opacity: 0.8; }
+}
+
+// ── Tabs bar ──────────────────────────────────────────────────────────────────
+.tabs-bar {
+  display: flex;
+  align-items: flex-end;
+  border-bottom: 1px solid #E0E0E0;
+  gap: 0;
+}
+
+.detail-tab {
+  display: flex;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: $font-family;
+  font-size: $font-btn-size;
+  font-weight: $font-btn-weight;
+  letter-spacing: $font-btn-ls;
+  color: $gray-700;
+  cursor: pointer;
+  white-space: nowrap;
+  margin-bottom: -1px;
+
+  &:hover:not(.detail-tab--active) { color: $gray-900; }
+
+  &--active {
+    border-bottom-color: $primary-500;
+    color: $primary-500;
+  }
+}
+
+// ── Stage tables area ─────────────────────────────────────────────────────────
+.stages-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 16px;
+}
+
+.stage-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stage-label {
+  font-family: $font-family;
+  font-size: 16px;
+  font-weight: 500;
+  color: $gray-900;
+  margin: 0;
+  letter-spacing: 0.1px;
+}
+
+.stage-table-wrap {
+  overflow-x: auto;
+  border-radius: 4px;
+  border: 1px solid #E9E9E9;
+  background: $white;
+}
+
+.stage-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: $font-family;
+
+  &__th {
+    height: 48px;
+    padding: 0 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    color: #424242;
+    background: #E9ECFB;
+    border-bottom: 1px solid #E0E0E0;
+    white-space: nowrap;
+  }
+
+  &__row {
+    background: $white;
+    &:hover td { background: #FAFAFA; }
+  }
+
+  &__td {
+    height: 56px;
+    padding: 0 16px;
+    font-size: 14px;
+    color: $gray-900;
+    border-bottom: 1px solid #E0E0E0;
+    white-space: nowrap;
+    vertical-align: middle;
+
+    &--muted { color: $gray-600; }
+  }
+}
+
+// ── Item cell (avatar + name) ─────────────────────────────────────────────────
+.item-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+
+  &__name {
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.item-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #E9ECFB;
+  color: $primary-500;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// ── Link button (blue clickable values in table cells) ────────────────────────
+.link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: $font-family;
+  font-size: 14px;
+  color: $primary-500;
+  cursor: pointer;
+
+  &:hover { text-decoration: underline; }
+}
+
+// ── Sessions cell with optional alert icon ────────────────────────────────────
+.sessions-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+}
+
+// ── Row action button ─────────────────────────────────────────────────────────
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover { background: $gray-100; }
+}
+
+// ── Empty tab placeholder ─────────────────────────────────────────────────────
+.empty-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  color: $gray-500;
+  font-family: $font-family;
+  font-size: 14px;
+}
+
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: $gray-500;
+  font-family: $font-family;
+  font-size: 14px;
+}

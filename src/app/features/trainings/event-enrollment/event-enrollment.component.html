@@ -1,0 +1,253 @@
+<div class="enrollment-page" *ngIf="training; else notFound">
+
+  <!-- Top header -->
+  <div class="page-header">
+    <button class="hdr-btn" title="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="#3E3E3E" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button class="hdr-btn" title="User">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" stroke="#3E3E3E" stroke-width="1.5"/>
+        <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" stroke="#3E3E3E" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Sub-header -->
+  <div class="sub-header">
+    <div class="sub-header__left">
+      <button class="hdr-btn" (click)="goBack()" title="Back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M12 5l-7 7 7 7" stroke="#3E3E3E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <span class="sub-header__title">Enrollments</span>
+    </div>
+  </div>
+
+  <!-- Body: sidebar + main -->
+  <div class="enrollment-body">
+
+    <!-- Left sidebar tabs -->
+    <div class="enrollment-sidebar">
+      <button
+        class="btn sidebar-tab"
+        [class.sidebar-tab--active]="activeTab === 'learners'"
+        (click)="setTab('learners')"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Learners
+      </button>
+      <button
+        class="btn sidebar-tab"
+        [class.sidebar-tab--active]="activeTab === 'processes'"
+        (click)="setTab('processes')"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M16 3h5v5M4 20L21 3M8 20H3v-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Processes
+      </button>
+    </div>
+
+    <!-- Main content -->
+    <div class="enrollment-main">
+
+      <!-- Actions bar -->
+      <div class="enrollment-actions">
+        <div class="enrollment-actions__left">
+          <button class="btn btn--primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            {{ activeTab === 'processes' ? 'Add process' : 'Add learners' }}
+          </button>
+          <div class="search-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="11" cy="11" r="7" stroke="#9E9E9E" stroke-width="1.5"/>
+              <path d="M16.5 16.5L21 21" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <input
+              type="text"
+              class="search-box__input"
+              placeholder="Search"
+              [(ngModel)]="searchQuery"
+            />
+          </div>
+        </div>
+        <button class="btn-filters">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M4 6h16M7 12h10M10 18h4" stroke="#424242" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          Filter
+        </button>
+      </div>
+
+      <!-- Enrollment capacity info -->
+      <div class="enrollment-capacity">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="9" stroke="#5C5C5C" stroke-width="1.5"/>
+          <path d="M12 9v4M12 16h.01" stroke="#5C5C5C" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Enrollment capacity for this event: {{ enrollmentCount }}/{{ enrollmentCapacity }}
+      </div>
+
+      <!-- Learners tab -->
+      <ng-container *ngIf="activeTab === 'learners'">
+        <div class="enrollment-table-wrap">
+          <div class="selection-toolbar" *ngIf="selectedLearnerIds.size > 0">
+            <div class="selection-toolbar__left">
+              <span class="selection-toolbar__count">{{ selectedLearnerIds.size }} item{{ selectedLearnerIds.size !== 1 ? 's' : '' }} selected</span>
+              <button class="selection-toolbar__select-all" (click)="selectAllLearners()">Select all</button>
+            </div>
+            <div class="selection-toolbar__right">
+              <button class="selection-toolbar__action">Remove</button>
+            </div>
+          </div>
+          <table class="enrollment-table">
+            <thead>
+              <tr>
+                <th class="enrollment-table__th" style="width:48px">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="allLearnersSelected"
+                         (change)="toggleAllLearners()">
+                </th>
+                <th class="enrollment-table__th">Student Name</th>
+                <th class="enrollment-table__th" style="width:200px">Enrollment type</th>
+                <th class="enrollment-table__th">Enrollment through</th>
+                <th class="enrollment-table__th" style="width:48px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let learner of filteredLearners" class="enrollment-table__row">
+                <td class="enrollment-table__td" style="text-align:center">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="selectedLearnerIds.has(learner.id)"
+                         (change)="toggleLearnerSelection(learner.id)">
+                </td>
+                <td class="enrollment-table__td">
+                  <div class="learner-cell">
+                    <div class="learner-avatar">{{ getInitials(learner.name) }}</div>
+                    <span class="learner-cell__name">{{ learner.name }}</span>
+                  </div>
+                </td>
+                <td class="enrollment-table__td">
+                  <span [class]="getEnrollmentTypeBadgeClass(learner.enrollmentType)">
+                    {{ learner.enrollmentType ?? '-' }}
+                  </span>
+                </td>
+                <td class="enrollment-table__td enrollment-table__td--muted">
+                  {{ learner.enrollmentThrough ?? '-' }}
+                </td>
+                <td class="enrollment-table__td">
+                  <button
+                    class="icon-btn"
+                    title="More options"
+                    (click)="toggleMenu($event, learner.id)"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="5" r="1.5" fill="#9E9E9E"/>
+                      <circle cx="12" cy="12" r="1.5" fill="#9E9E9E"/>
+                      <circle cx="12" cy="19" r="1.5" fill="#9E9E9E"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="filteredLearners.length === 0">
+                <td colspan="5" class="enrollment-table__empty">No learners found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+
+      <!-- Processes tab -->
+      <ng-container *ngIf="activeTab === 'processes'">
+        <div class="enrollment-table-wrap">
+          <div class="selection-toolbar" *ngIf="selectedProcessIds.size > 0">
+            <div class="selection-toolbar__left">
+              <span class="selection-toolbar__count">{{ selectedProcessIds.size }} item{{ selectedProcessIds.size !== 1 ? 's' : '' }} selected</span>
+              <button class="selection-toolbar__select-all" (click)="selectAllProcesses()">Select all</button>
+            </div>
+            <div class="selection-toolbar__right">
+              <button class="selection-toolbar__action">Remove</button>
+            </div>
+          </div>
+          <table class="enrollment-table">
+            <thead>
+              <tr>
+                <th class="enrollment-table__th" style="width:48px">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="allProcessesSelected"
+                         (change)="toggleAllProcesses()">
+                </th>
+                <th class="enrollment-table__th">Process name</th>
+                <th class="enrollment-table__th">Description</th>
+                <th class="enrollment-table__th" style="width:200px">Learners in this process</th>
+                <th class="enrollment-table__th" style="width:48px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let process of processes" class="enrollment-table__row">
+                <td class="enrollment-table__td" style="text-align:center">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="selectedProcessIds.has(process.id)"
+                         (change)="toggleProcessSelection(process.id)">
+                </td>
+                <td class="enrollment-table__td">{{ process.name }}</td>
+                <td class="enrollment-table__td enrollment-table__td--muted process-description">
+                  {{ process.description }}
+                </td>
+                <td class="enrollment-table__td enrollment-table__td--muted">
+                  {{ process.learnersCount }}
+                </td>
+                <td class="enrollment-table__td">
+                  <button
+                    class="icon-btn"
+                    title="More options"
+                    (click)="toggleMenu($event, process.id)"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="5" r="1.5" fill="#9E9E9E"/>
+                      <circle cx="12" cy="12" r="1.5" fill="#9E9E9E"/>
+                      <circle cx="12" cy="19" r="1.5" fill="#9E9E9E"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="processes.length === 0">
+                <td colspan="5" class="enrollment-table__empty">No enrollment processes configured.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+  <!-- Row options dropdown -->
+  <div
+    class="learner-menu-dropdown"
+    *ngIf="openMenuId !== null"
+    [style.top.px]="dropdownPosition.top"
+    [style.right.px]="dropdownPosition.right"
+    (click)="$event.stopPropagation()"
+  >
+    <button class="learner-menu-dropdown__item">View details</button>
+    <button class="learner-menu-dropdown__item learner-menu-dropdown__item--danger">Remove</button>
+  </div>
+
+</div>
+
+<ng-template #notFound>
+  <div class="not-found">Training not found.</div>
+</ng-template>

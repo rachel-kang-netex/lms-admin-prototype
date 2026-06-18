@@ -1,0 +1,154 @@
+<div class="data-table-wrapper">
+
+  <!-- Action row sits ABOVE the table border -->
+  <div class="actions-row">
+    <div class="actions-row__left">
+      <button *ngIf="primaryAction" class="btn-primary" (click)="primaryActionClick.emit()">
+        {{ primaryAction }}
+      </button>
+      <div class="search-box">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <circle cx="11" cy="11" r="7" stroke="#9E9E9E" stroke-width="1.5"/>
+          <path d="M16.5 16.5L21 21" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <input
+          type="text"
+          class="search-box__input"
+          [placeholder]="searchPlaceholder"
+          [(ngModel)]="searchTerm"
+        />
+      </div>
+    </div>
+    <div class="actions-row__right">
+      <button class="btn-filters">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M4 6h16M7 12h10M10 18h4" stroke="#424242" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Table — border starts here, not above -->
+  <div class="table-border">
+
+  <!-- Blue selection toolbar — appears when rows are selected -->
+  <div class="selection-toolbar" *ngIf="selectedRows.size > 0">
+    <div class="selection-toolbar__left">
+      <span class="selection-toolbar__count">{{ selectedRows.size }} item{{ selectedRows.size !== 1 ? 's' : '' }} selected</span>
+      <button class="selection-toolbar__select-all" (click)="selectAll()">Select all</button>
+    </div>
+    <div class="selection-toolbar__right">
+      <button
+        *ngFor="let action of selectionActions"
+        class="selection-toolbar__action"
+        (click)="onSelectionAction(action.action)">
+        {{ action.label }}
+      </button>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="table__th table__th--checkbox">
+            <input
+              type="checkbox"
+              class="table-checkbox"
+              [checked]="allSelected"
+              (change)="toggleAll()"
+              (click)="$event.stopPropagation()">
+          </th>
+          <th *ngFor="let col of columns" class="table__th" [style.width]="col.width">
+            {{ col.label }}
+          </th>
+          <!-- Gear icon header for actions column -->
+          <th class="table__th table__th--gear">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="3" stroke="#757575" stroke-width="1.5"/>
+              <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="#757575" stroke-width="1.5"/>
+            </svg>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let row of filteredData"
+          class="table__row"
+          [class.table__row--selected]="selectedRows.has(row)"
+          (click)="onRowClick(row)"
+        >
+          <td class="table__td table__td--checkbox" (click)="$event.stopPropagation()">
+            <input
+              type="checkbox"
+              class="table-checkbox"
+              [checked]="selectedRows.has(row)"
+              (change)="toggleRow(row)">
+          </td>
+          <ng-container *ngFor="let col of columns; let first = first">
+            <!-- Name cell: avatar + blue link text -->
+            <td *ngIf="first" class="table__td table__td--name">
+              <div class="cell-name">
+                <div class="avatar">{{ getInitials(row[col.key]) }}</div>
+                <span class="cell-name__text">{{ row[col.key] }}</span>
+              </div>
+            </td>
+
+            <!-- Status badge cell -->
+            <td *ngIf="!first && col.type === 'badge'" class="table__td">
+              <app-status-badge [status]="row[col.key]"></app-status-badge>
+            </td>
+
+            <!-- Default text cell -->
+            <td *ngIf="!first && col.type !== 'badge'" class="table__td table__td--text">
+              {{ row[col.key] }}
+            </td>
+          </ng-container>
+
+          <!-- Row actions: ⓘ info + ⋮ more -->
+          <td class="table__td table__td--actions" (click)="$event.stopPropagation()">
+            <button class="action-btn" title="Info" (click)="onInfo($event, row)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="#9E9E9E" stroke-width="1.5"/>
+                <path d="M12 16v-4M12 8h.01" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </button>
+            <div class="menu-wrap">
+              <button class="action-btn" title="More options" (click)="onMenu($event, row)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="5" r="1.5" fill="#9E9E9E"/>
+                  <circle cx="12" cy="12" r="1.5" fill="#9E9E9E"/>
+                  <circle cx="12" cy="19" r="1.5" fill="#9E9E9E"/>
+                </svg>
+              </button>
+              <div class="row-menu"
+                *ngIf="openMenuRow === row && getMenuItems && menuPosition"
+                [style.top.px]="menuPosition!.top"
+                [style.right.px]="menuPosition!.right"
+                (click)="$event.stopPropagation()">
+                <ng-container *ngFor="let item of getMenuItems!(row)">
+                  <div class="row-menu__divider" *ngIf="item.dividerBefore"></div>
+                  <ng-container [ngSwitch]="getItemType(item)">
+                    <div class="row-menu__item row-menu__item--disabled" *ngSwitchCase="'disabled'">{{ item.label }}</div>
+                    <button class="row-menu__item row-menu__item--btn" *ngSwitchCase="'action'"
+                      (click)="onMenuItemClick(item.action!, row)">{{ item.label }}</button>
+                    <div class="row-menu__item" *ngSwitchDefault>{{ item.label }}</div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Empty state -->
+        <tr *ngIf="filteredData.length === 0">
+          <td [attr.colspan]="columns.length + 2" class="table__empty">
+            No results found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  </div>
+</div>

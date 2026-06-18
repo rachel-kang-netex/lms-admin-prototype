@@ -1,0 +1,169 @@
+@import '../../styles/tokens';
+
+:host {
+  display: block;
+}
+
+.dp-wrap {
+  position: relative;
+  width: 100%;
+}
+
+// ── Trigger ──────────────────────────────────────────────────────────────────
+.dp-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 48px;
+  padding: 0 12px;
+  background: $white;
+  border: 1px solid $gray-300;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+
+  &:hover { border-color: $gray-400; }
+}
+
+.dp-trigger__value {
+  font-family: $font-family;
+  font-size: $font-body-size;
+  color: $gray-900;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  &--empty { color: $gray-500; }
+}
+
+.dp-trigger__icon {
+  flex-shrink: 0;
+  color: $gray-700;
+}
+
+// ── Popup ─────────────────────────────────────────────────────────────────────
+.dp-popup {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 300;
+  background: $white;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.16);
+  padding: 16px 12px;
+  width: 280px;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.dp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0 4px;
+}
+
+.dp-header__title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: $font-family;
+  font-size: $font-body-size;
+  font-weight: 500;
+  color: $gray-900;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  &:hover { background: $gray-100; }
+}
+
+.dp-header__nav {
+  display: flex;
+  gap: 0;
+}
+
+.dp-nav-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 50%;
+  color: $gray-800;
+
+  &:hover { background: $gray-100; }
+}
+
+// ── Grid ──────────────────────────────────────────────────────────────────────
+.dp-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  justify-items: center;
+}
+
+.dp-day-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-family: $font-family;
+  font-size: 12px;
+  font-weight: 500;
+  color: $gray-600;
+}
+
+// ── Day cells ─────────────────────────────────────────────────────────────────
+.dp-day {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  font-family: $font-family;
+  font-size: 13px;
+  color: $gray-900;
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: background 0.1s;
+
+  &--empty {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &--today {
+    background: $primary-500;
+    color: $white;
+    font-weight: 500;
+  }
+
+  &--selected:not(.dp-day--today) {
+    background: #E9ECFB;
+    color: $primary-500;
+    font-weight: 500;
+  }
+
+  &:not(.dp-day--empty):not(.dp-day--today):not(.dp-day--selected):hover {
+    background: $gray-100;
+  }
+}
+
+.dp-month-abbrev {
+  font-family: $font-family;
+  font-size: 11px;
+  font-weight: 600;
+  color: $gray-500;
+  letter-spacing: 0.04em;
+}

@@ -1,0 +1,189 @@
+@import '../../../shared/styles/tokens';
+
+// Sidebar accent color from Figma (#1E293B = slate-800)
+$sidebar-bg:          #1E293B;
+$sidebar-border:      rgba(100, 116, 139, 0.13);
+$sidebar-text:        rgba(255, 255, 255, 0.7);
+$sidebar-text-active: #FFFFFF;
+$sidebar-active-bg:   rgba(255, 255, 255, 0.3);
+
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// ── Sidebar ───────────────────────────────────────────────────────────────────
+.sidebar {
+  width: $sidebar-width;
+  min-width: $sidebar-width;
+  height: 100vh;
+  background: $sidebar-bg;
+  border-right: 1px solid $sidebar-border;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar__header {
+  padding: 24px 12px;
+  height: 82px;
+  display: flex;
+  align-items: center;
+  padding-left: 28px; // 12px outer + 16px inner = matches Figma's px-[16px] inside header
+}
+
+.sidebar__title {
+  font-size: $font-h2-size;
+  font-weight: $font-h2-weight;
+  letter-spacing: $font-h2-ls;
+  color: $sidebar-text-active;
+  line-height: $font-h2-lh;
+}
+
+.sidebar__nav {
+  padding: 24px 12px 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+// ── Accordion nav group ───────────────────────────────────────────────────────
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nav-group__trigger {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 44px;
+  padding: 0 16px;
+  border-radius: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: $font-family;
+  font-size: $font-btn-size;
+  font-weight: $font-btn-weight;
+  letter-spacing: $font-btn-ls;
+  color: $sidebar-text-active;
+  width: 100%;
+  text-align: left;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.nav-group__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  color: $sidebar-text-active;
+}
+
+.nav-group__label {
+  flex: 1;
+  line-height: $font-btn-lh;
+}
+
+.nav-group__chevron {
+  flex-shrink: 0;
+  color: $sidebar-text;
+  transition: transform 0.2s ease;
+
+  &--open {
+    transform: rotate(180deg);
+  }
+}
+
+.nav-group__children {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 0 6px 40px;
+}
+
+// ── Child nav item ────────────────────────────────────────────────────────────
+.nav-child {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: $font-btn-size;
+  font-weight: $font-btn-weight;
+  letter-spacing: $font-btn-ls;
+  color: $sidebar-text;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: $sidebar-text-active;
+  }
+
+  &--active {
+    background: $sidebar-active-bg;
+    color: $sidebar-text-active;
+  }
+}
+
+// ── Flat nav item ─────────────────────────────────────────────────────────────
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 44px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: $font-btn-size;
+  font-weight: $font-btn-weight;
+  letter-spacing: $font-btn-ls;
+  color: $sidebar-text;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.1s, color 0.1s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: $sidebar-text-active;
+  }
+
+  &--active {
+    background: $sidebar-active-bg;
+    color: $sidebar-text-active;
+  }
+}
+
+.nav-item__icon {
+  display: flex;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+.nav-item__label {
+  line-height: $font-btn-lh;
+}
+
+// ── Main screen ───────────────────────────────────────────────────────────────
+.main-screen {
+  flex: 1;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background: $white;
+  min-width: 0;
+}

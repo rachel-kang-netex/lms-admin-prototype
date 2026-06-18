@@ -1,0 +1,560 @@
+@import '../../../shared/styles/tokens';
+
+.detail-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #F4F4F4;
+}
+
+// ── Shared header button ──────────────────────────────────────────────────────
+.hdr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover { background: #F5F5F5; }
+}
+
+// ── Top header ────────────────────────────────────────────────────────────────
+.page-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: $white;
+  border-bottom: 1px solid #E9E9E9;
+  box-shadow: 0 2px 1.5px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+// ── Sub-header ────────────────────────────────────────────────────────────────
+.sub-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: $white;
+  box-shadow: 0 2px 1.5px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1A1A1A;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__tabs {
+    display: flex;
+    align-items: flex-end;
+    height: 100%;
+    flex: 1;
+    justify-content: center;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    justify-content: flex-end;
+  }
+}
+
+// ── Detail tabs ───────────────────────────────────────────────────────────────
+.detail-tab {
+  display: flex;
+  align-items: center;
+  height: 80px;
+  padding: 10px 12px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: $font-family;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1.25px;
+  color: #5C5C5C;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &--active {
+    color: #2239C2;
+    border-bottom-color: #2239C2;
+  }
+
+  &:hover:not(.detail-tab--active) { color: #1A1A1A; }
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 20px;
+  border-radius: 50px;
+  font-family: $font-family;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1.25px;
+  cursor: pointer;
+  border: none;
+
+  &--primary {
+    background: #2239C2;
+    color: $white;
+    &:hover { opacity: 0.88; }
+  }
+
+  &--ghost-blue {
+    background: none;
+    color: #2239C2;
+    &:hover { background: rgba(34, 57, 194, 0.06); }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+  }
+
+  &--unpublish {
+    background: none;
+    color: #3E3E3E;
+    border: 1px solid #B8B8B8;
+    &:hover { background: #F5F5F5; }
+  }
+}
+
+// ── Content area ──────────────────────────────────────────────────────────────
+.detail-content {
+  flex: 1;
+  overflow-y: auto;
+  background: #F4F4F4;
+}
+
+.detail-inner {
+  width: 1024px;
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 56px 32px 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+// ── Section heading ───────────────────────────────────────────────────────────
+.section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__title {
+    font-family: $font-family;
+    font-size: 20px;
+    font-weight: 500;
+    color: #1A1A1A;
+    letter-spacing: 0.1px;
+    line-height: 26px;
+    margin: 0;
+  }
+
+  &__desc {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: #707070;
+    line-height: 20px;
+    margin: 0;
+    padding-right: 48px;
+  }
+}
+
+
+.link {
+  color: #2239C2;
+  text-decoration: underline;
+}
+
+// ── Module card ───────────────────────────────────────────────────────────────
+.module-card {
+  background: $white;
+  border: 1px solid #D4D4D4;
+  border-radius: 8px;
+
+  &__content {
+    padding: 16px;
+  }
+
+  &__footer {
+    border-top: 1px solid #D4D4D4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+}
+
+.module-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &--not-last {
+    border-bottom: 1px solid #D4D4D4;
+    padding-bottom: 12px;
+    margin-bottom: 12px;
+  }
+
+  &--has-desc {
+    align-items: flex-start;
+  }
+
+  &__info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 8px;
+  }
+
+  &__top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+  }
+
+  &__name {
+    flex: 1;
+    font-family: $font-family;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1A1A1A;
+    line-height: 24px;
+  }
+
+  &__desc {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1A1A1A;
+    line-height: 18px;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+.duration-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid #414141;
+  border-radius: 8px;
+  background: #D4D4D4;
+  font-family: $font-family;
+  font-size: 14px;
+  font-weight: 400;
+  color: #414141;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:hover { background: #F5F5F5; }
+}
+
+// ── Header options dropdown ───────────────────────────────────────────────────
+.header-menu-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.header-menu {
+  position: fixed;
+  z-index: 1000;
+  background: $white;
+  border-radius: 4px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.16);
+  min-width: 180px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+
+  &__divider {
+    height: 1px;
+    background: #D4D4D4;
+    flex-shrink: 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 24px;
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #1A1A1A;
+    white-space: nowrap;
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+    cursor: default;
+
+    &--btn {
+      cursor: pointer;
+      &:hover { background: #F5F5F5; }
+    }
+
+    &--disabled {
+      opacity: 0.5;
+    }
+  }
+}
+
+// ── Module row context menu ───────────────────────────────────────────────────
+.module-menu-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.module-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  z-index: 100;
+  background: $white;
+  border: 1px solid #E0E0E0;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  min-width: 160px;
+  padding: 4px 0;
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: #1A1A1A;
+    text-align: left;
+    cursor: pointer;
+
+    &:hover:not(:disabled) { background: #F5F5F5; }
+
+    &--delete {
+      color: #D32F2F;
+
+      &:disabled {
+        color: #BDBDBD;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// ── Training side panel form ──────────────────────────────────────────────────
+.training-form {
+  padding: 0;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 40px 32px;
+}
+
+.form-section__texts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-section__title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1A1A1A;
+  line-height: 24px;
+  margin: 0;
+}
+
+.form-section__subtitle {
+  font-size: 14px;
+  font-weight: 400;
+  color: #707070;
+  line-height: 20px;
+  margin: 0;
+}
+
+.form-divider {
+  border: none;
+  border-top: 1px solid #E0E0E0;
+  margin: 0 32px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #424242;
+    line-height: 18px;
+  }
+
+  &__input {
+    height: 48px;
+    padding: 0 12px;
+    border: 1px solid #D4D4D4;
+    border-radius: 4px;
+    background: $white;
+    font-size: 14px;
+    color: #1A1A1A;
+    outline: none;
+    width: 100%;
+    font-family: $font-family;
+
+    &:focus { border-color: #2239C2; }
+    &:disabled { background: #F5F5F5; color: #707070; cursor: default; }
+  }
+}
+
+.info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #EBEBEB;
+  border-radius: 8px;
+  padding: 20px;
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1A1A1A;
+    line-height: 20px;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: #424242;
+    line-height: 18px;
+    margin: 0;
+  }
+
+  &__link {
+    color: #2239C2;
+    text-decoration: underline;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+}
+
+.btn-ghost-sm {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 50px;
+  background: #E0E0E0;
+  color: #424242;
+  border: none;
+  font-family: $font-family;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  align-self: flex-start;
+
+  &:hover { opacity: 0.88; }
+}
+
+// ── States ────────────────────────────────────────────────────────────────────
+.empty-state {
+  font-family: $font-family;
+  font-size: 14px;
+  color: #707070;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  font-family: $font-family;
+  font-size: 16px;
+  color: #707070;
+}

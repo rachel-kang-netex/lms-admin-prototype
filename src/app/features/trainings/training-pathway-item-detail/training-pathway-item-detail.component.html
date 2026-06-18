@@ -1,0 +1,438 @@
+<div class="pathway-item-detail" *ngIf="pathway && item; else notFound">
+
+  <!-- ── Top header ─────────────────────────────────────────────────────────── -->
+  <div class="page-header">
+    <button class="hdr-btn" title="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="#3E3E3E" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button class="hdr-btn" title="User">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" stroke="#3E3E3E" stroke-width="1.5"/>
+        <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" stroke="#3E3E3E" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── Sub-header ─────────────────────────────────────────────────────────── -->
+  <div class="sub-header">
+    <div class="sub-header__left">
+      <button class="hdr-btn" (click)="goBack()" title="Back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M12 5l-7 7 7 7" stroke="#3E3E3E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>sched
+      </button>
+      <span class="sub-header__title">{{ pathway!.name }}</span>
+      <app-status-badge [status]="pathway!.status"></app-status-badge>
+    </div>
+    <div class="sub-header__actions">
+      <button class="btn btn--outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Pathway enrollment
+      </button>
+      <button class="hdr-btn" title="More options">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="5" r="1.2" fill="#3E3E3E"/>
+          <circle cx="12" cy="12" r="1.2" fill="#3E3E3E"/>
+          <circle cx="12" cy="19" r="1.2" fill="#3E3E3E"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Content body: left nav + right content ─────────────────────────────── -->
+  <div class="pathway-body">
+
+    <!-- Left navigation sidebar -->
+    <nav class="pathway-menu" [class.pathway-menu--expanded]="sidebarExpanded">
+
+      <button class="pathway-menu__toggle" (click)="toggleSidebar()" title="Toggle sidebar">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M3 6h18M3 12h18M3 18h18" stroke="#3E3E3E" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+      </button>
+
+      <!-- Pathway row — clickable link back to pathway detail -->
+      <div class="pathway-menu__pathway-outer">
+        <button class="pathway-menu__pathway-inner" (click)="goBack()">
+          <svg class="pathway-menu__icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          <span class="pathway-menu__text pathway-menu__text--pathway">{{ pathway!.pathwayName || pathway!.name }}</span>
+        </button>
+      </div>
+
+      <!-- Stages and items tree -->
+      <ng-container *ngFor="let s of stages">
+
+        <div class="pathway-menu__stage-outer">
+          <div class="pathway-menu__stage-inner">
+            <svg class="pathway-menu__icon" width="14" height="14" viewBox="0 0 24 24" fill="none">
+              <path d="M4 6h16M4 10h16M4 14h16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span class="pathway-menu__text pathway-menu__text--stage">{{ s.label }}</span>
+          </div>
+        </div>
+
+        <div class="pathway-menu__item-outer" *ngFor="let si of s.items; let i = index">
+          <button class="pathway-menu__item-inner"
+                  [class.pathway-menu__item-inner--active]="s.id === stageId && i === itemIdx"
+                  (click)="navigateToItem(s.id, i)">
+            <svg class="pathway-menu__icon" width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6 12v5c0 2 4 3 6 3s6-1 6-3v-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span class="pathway-menu__text pathway-menu__text--item">{{ si.name }}</span>
+          </button>
+        </div>
+
+      </ng-container>
+    </nav>
+
+    <!-- Right content area -->
+    <div class="pathway-item-container">
+
+      <!-- Card header: item title + see event/course link -->
+      <div class="item-card-header">
+        <div class="item-title-row">
+          <h1 class="item-title"><span class="item-title-prefix">../</span>{{ item!.name }}</h1>
+          <button *ngIf="stage?.type === 'events' && item!.trainingId"
+                  class="see-item-link"
+                  (click)="goToTraining()">SEE EVENT</button>
+          <span *ngIf="stage?.type === 'courses'" class="see-item-link see-item-link--disabled">SEE COURSE</span>
+        </div>
+      </div>
+
+      <!-- Events: sessions content -->
+      <ng-container *ngIf="stage?.type === 'events'">
+        <div class="item-card-body">
+
+          <!-- Actions row -->
+          <div class="item-actions">
+            <button class="btn btn--primary" (click)="openNewSessionPanel()">New session</button>
+            <button class="btn btn--outline item-actions__filters">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M4 6h16M7 12h10M10 18h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Filters
+            </button>
+          </div>
+
+          <!-- Multiple-sessions checkbox -->
+          <div class="sessions-option">
+            <input type="checkbox" id="multiSessionOpt" [(ngModel)]="allowMultipleSessions" [disabled]="sessions.length <= 1">
+            <label for="multiSessionOpt">Allow users to select between which session they want to attend. Available only for events with multiple sessions.</label>
+          </div>
+
+          <!-- Sessions table -->
+          <div class="sessions-table-wrap">
+            <table class="sessions-table">
+              <thead>
+                <tr>
+                  <th class="sessions-table__th">Session name</th>
+                  <th class="sessions-table__th" style="width:130px">Status</th>
+                  <th class="sessions-table__th" style="width:160px">Scheduled modules</th>
+                  <th class="sessions-table__th" style="width:290px">Date and time</th>
+                  <th class="sessions-table__th" style="width:120px">Total duration</th>
+                  <th class="sessions-table__th" style="width:100px">Capacity</th>
+                  <th class="sessions-table__th" style="width:220px">Trainers</th>
+                  <th class="sessions-table__th" style="width:48px"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="sessions-table__row" *ngFor="let session of sessions">
+                  <td class="sessions-table__td">
+                    <div class="session-name-cell">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="session-name-cell__icon">
+                        <rect x="3" y="4" width="18" height="18" rx="2" stroke="#9E9E9E" stroke-width="1.5"/>
+                        <path d="M3 9h18M8 2v4M16 2v4" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                      <button class="link-btn" (click)="goToSession(session.id)">{{ session.name }}</button>
+                    </div>
+                  </td>
+                  <td class="sessions-table__td">
+                    <app-status-badge [status]="session.status"></app-status-badge>
+                  </td>
+                  <td class="sessions-table__td">
+                    <div class="scheduled-modules-cell">
+                      <span class="sessions-table__td--muted">{{ session.scheduledModules }}</span>
+                      <svg *ngIf="session.modulesComplete" width="18" height="18" viewBox="0 0 24 24" fill="none" class="modules-icon modules-icon--done">
+                        <circle cx="12" cy="12" r="10" fill="#4CAF50"/>
+                        <path d="M7 12l3.5 3.5L17 9" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      <svg *ngIf="!session.modulesComplete" width="18" height="18" viewBox="0 0 24 24" fill="none" class="modules-icon modules-icon--alert">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#F59E0B" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M12 9v4M12 17h.01" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                  </td>
+                  <td class="sessions-table__td sessions-table__td--muted">{{ session.dateRange }}</td>
+                  <td class="sessions-table__td sessions-table__td--muted">{{ session.totalDuration }}</td>
+                  <td class="sessions-table__td sessions-table__td--muted">{{ session.capacity }}</td>
+                  <td class="sessions-table__td">
+                    <div class="trainer-cell">
+                      <div class="trainer-avatar">{{ getInitials(session.trainer.name) }}</div>
+                      <span class="trainer-cell__name">{{ session.trainer.name }}</span>
+                    </div>
+                  </td>
+                  <td class="sessions-table__td">
+                    <button class="icon-btn" title="More options">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="5" r="1.5" fill="#9E9E9E"/>
+                        <circle cx="12" cy="12" r="1.5" fill="#9E9E9E"/>
+                        <circle cx="12" cy="19" r="1.5" fill="#9E9E9E"/>
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr *ngIf="sessions.length === 0">
+                  <td colspan="8" class="sessions-table__empty">No sessions yet.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </ng-container>
+
+      <!-- Courses: placeholder -->
+      <ng-container *ngIf="stage?.type === 'courses'">
+        <div class="item-card-body">
+          <div class="empty-tab">
+            <p>Course details will appear here.</p>
+          </div>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+
+</div>
+
+<ng-template #notFound>
+  <div class="not-found">Item not found.</div>
+</ng-template>
+
+<!-- New session side panel -->
+<app-side-panel
+  title="New session"
+  [open]="newSessionPanelOpen"
+  (save)="saveNewSession()"
+  (cancel)="closeNewSessionPanel()"
+>
+  <form class="event-form">
+
+    <!-- Section: Main data -->
+    <div class="form-section">
+      <div class="form-section__texts">
+        <p class="form-section__title">Main data</p>
+        <p class="form-section__subtitle">This is the most relevant information of your training</p>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label">Session name *</label>
+        <input class="form-field__input" type="text" [(ngModel)]="newSessionName" name="newSessionName" placeholder="Enter session name" />
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label">Event *</label>
+        <div class="form-field__select-wrap">
+          <select class="form-field__select" name="newSessionEvent" disabled>
+            <option [value]="item?.name">{{ item?.name }}</option>
+          </select>
+          <svg class="form-field__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- Info card -->
+    <div class="form-section">
+      <div class="info-card">
+        <div class="info-card__body">
+          <p class="info-card__title">Date and location configurations have moved to give you more control</p>
+          <p class="info-card__desc">
+            Dates and locations are now configured within the module schedule. You can further customize other settings like trainers, attendance and virtual rooms, etc in each scheduled module.
+            <a href="#" class="info-card__link">Learn more</a>
+          </p>
+        </div>
+        <div class="info-card__icon">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <circle cx="28" cy="34" r="18" stroke="#9E9E9E" stroke-width="2.5"/>
+            <path d="M28 24v10l6 6" stroke="#9E9E9E" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="44" cy="20" r="12" stroke="#9E9E9E" stroke-width="2.5"/>
+            <path d="M38 14l4 3-1 5 4-2 4 2-1-5 4-3-5-1-2-4-2 4-5 1z" fill="#9E9E9E"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- Section: Delivery and completion -->
+    <div class="form-section">
+      <p class="form-section__title">Delivery and completion</p>
+
+      <div class="form-field">
+        <p class="form-field__label form-field__label--bold">Trainers</p>
+        <p class="form-section__subtitle">If sessions are activated, you can also assign trainers to individual sessions.</p>
+        <button type="button" class="btn btn--ghost btn--sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5v14M5 12h14" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add trainers
+        </button>
+      </div>
+
+      <div class="form-field">
+        <p class="form-field__label form-field__label--bold">Certificate</p>
+        <p class="form-section__subtitle">Choose a certificate learners will receive when they pass the event.</p>
+        <button type="button" class="btn btn--ghost btn--sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M12 5v14M5 12h14" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Add certificate
+        </button>
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- Section: Enrollment -->
+    <div class="form-section">
+      <p class="form-section__title">Enrollment</p>
+
+      <div class="form-field">
+        <div class="form-toggle-row">
+          <div>
+            <p class="form-toggle-row__label">Public training</p>
+            <p class="form-toggle-row__desc">All learners will be able to enroll in the training.</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="newSessionPublicTraining" name="newSessionPublicTraining" />
+            <span class="toggle__track"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <div class="form-toggle-row">
+          <div>
+            <p class="form-toggle-row__label">Enrollment deadline</p>
+            <p class="form-toggle-row__desc">Set the period after which learners can no longer enroll in the event.</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="newSessionEnrollmentDeadline" name="newSessionEnrollmentDeadline" />
+            <span class="toggle__track"></span>
+          </label>
+        </div>
+        <div class="closing-date-row" *ngIf="newSessionEnrollmentDeadline">
+          <span class="form-field__label">Closing date</span>
+          <div class="form-row--inline">
+            <input class="form-field__input form-field__input--sm" type="number" [(ngModel)]="newSessionClosingDateValue" name="newSessionClosingDateValue" min="1" />
+            <div class="form-field__select-wrap form-field__select-wrap--sm">
+              <select class="form-field__select" [(ngModel)]="newSessionClosingDateUnit" name="newSessionClosingDateUnit">
+                <option value="days">days</option>
+                <option value="weeks">weeks</option>
+              </select>
+              <svg class="form-field__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M6 9l6 6 6-6" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="form-field__unit">before the event starts</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <div class="form-toggle-row">
+          <div>
+            <p class="form-toggle-row__label">Maximum capacity</p>
+            <p class="form-toggle-row__desc">Define a maximum number of learners who will be able to access the event.</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="newSessionMaxCapacityEnabled" name="newSessionMaxCapacityEnabled" />
+            <span class="toggle__track"></span>
+          </label>
+        </div>
+        <div class="form-field form-field--shrink" *ngIf="newSessionMaxCapacityEnabled">
+          <label class="form-field__label">Max. capacity *</label>
+          <input class="form-field__input" type="number" [(ngModel)]="newSessionMaxCapacityValue" name="newSessionMaxCapacityValue" min="0" />
+        </div>
+      </div>
+
+      <div class="form-field">
+        <div class="form-toggle-row">
+          <div>
+            <p class="form-toggle-row__label">Automatic seat reservation</p>
+            <p class="form-toggle-row__desc">Users will get a seat at the event without needing administrator approval.</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="newSessionAutoSeatReservation" name="newSessionAutoSeatReservation" />
+            <span class="toggle__track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- Section: Marketing -->
+    <div class="form-section">
+      <p class="form-section__title">Marketing</p>
+
+      <div class="form-field">
+        <div class="form-toggle-row">
+          <div>
+            <p class="form-toggle-row__label">Featured</p>
+            <p class="form-toggle-row__desc">This training will be displayed in the highlight carousel at the top of the homepage.</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="newSessionFeatured" name="newSessionFeatured" />
+            <span class="toggle__track"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label">Carousel</label>
+        <div class="form-field__select-wrap">
+          <select class="form-field__select" [(ngModel)]="newSessionCarousel" name="newSessionCarousel">
+            <option value="">Choose carousel</option>
+          </select>
+          <svg class="form-field__chevron" width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 9l6 6 6-6" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <!-- Section: Communication -->
+    <div class="form-section">
+      <p class="form-section__title">Communication</p>
+
+      <div class="form-field">
+        <div class="form-toggle-row">
+          <div>
+            <p class="form-toggle-row__label">Email notifications</p>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" [(ngModel)]="newSessionEmailNotifications" name="newSessionEmailNotifications" />
+            <span class="toggle__track"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+  </form>
+</app-side-panel>

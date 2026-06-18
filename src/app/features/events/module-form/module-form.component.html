@@ -1,0 +1,41 @@
+<div class="form-fields">
+
+  <app-ui-input
+    label="Item name*"
+    placeholder="Name"
+    [(ngModel)]="name"
+    name="moduleName"
+  ></app-ui-input>
+
+  <app-ui-textarea
+    label="Description"
+    placeholder="Description of what would be covered"
+    [(ngModel)]="description"
+    name="moduleDescription"
+  ></app-ui-textarea>
+
+  <div class="duration-field">
+    <span class="duration-field__label">Duration (in minutes)</span>
+    <div class="duration-field__row">
+      <div class="duration-field__input-wrap">
+        <app-ui-input
+          placeholder="60"
+          type="number"
+          [(ngModel)]="duration"
+          name="moduleDuration"
+        ></app-ui-input>
+      </div>
+      <span class="duration-field__unit">mins</span>
+    </div>
+  </div>
+
+  <div class="criteria-field">
+    <app-ui-select
+      label="Completion criteria"
+      [options]="completionOptions"
+      [(ngModel)]="completionCriteria"
+      name="moduleCompletionCriteria"
+    ></app-ui-select>
+  </div>
+
+</div>
