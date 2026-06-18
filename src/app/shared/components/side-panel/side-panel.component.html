@@ -1,0 +1,29 @@
+<div class="side-panel-overlay" *ngIf="open" (click)="onCancel()"></div>
+
+<div class="side-panel" [class.side-panel--open]="open">
+  <!-- Header -->
+  <div class="side-panel__header">
+    <div class="side-panel__header-left">
+      <button class="icon-btn icon-btn--close" (click)="onCancel()" title="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M18 6L6 18M6 6l12 12" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+      <span class="side-panel__title">{{ title }}</span>
+    </div>
+    <button class="btn btn--primary" (click)="onSave()">Save</button>
+  </div>
+
+  <!-- Scrollable content -->
+  <div class="side-panel__body">
+    <div class="side-panel__content">
+      <ng-content></ng-content>
+    </div>
+
+    <!-- Footer -->
+    <div class="side-panel__footer">
+      <button class="btn btn--outlined" (click)="onCancel()">Cancel</button>
+      <button class="btn btn--primary" (click)="onSave()">Save</button>
+    </div>
+  </div>
+</div>

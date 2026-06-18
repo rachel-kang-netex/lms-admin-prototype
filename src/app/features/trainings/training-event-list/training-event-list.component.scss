@@ -1,0 +1,116 @@
+@import '../../../shared/styles/tokens';
+
+.trainings-page {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #F5F5F5;
+}
+
+.page-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: $white;
+  border-bottom: 1px solid #E9E9E9;
+  box-shadow: 0 2px 1.5px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.hdr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover { background: #F5F5F5; }
+}
+
+// ── Tabs bar ──────────────────────────────────────────────────────────────────
+.tabs-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 2px 20px 0px 20px;
+  background: $white;
+  border-bottom: 1px solid #E0E0E0;
+  box-shadow: 0 2px 1.5px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+
+  &__tabs {
+    display: flex;
+    align-items: flex-end;
+  }
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 48px;
+  padding: 0 20px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: $font-family;
+  font-size: 14px;
+  font-weight: 400;
+  color: #757575;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &--active {
+    color: #2239C2;
+    border-bottom-color: #2239C2;
+    font-weight: 500;
+  }
+
+  &--closeable { color: #424242; }
+
+  &:hover:not(.tab--active) { color: #1A1A1A; }
+}
+
+.tab__close {
+  display: inline-flex;
+  align-items: center;
+  color: #9E9E9E;
+
+  &:hover { color: #424242; }
+}
+
+.btn-new-view {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 48px;
+  padding: 0 4px;
+  background: none;
+  border: none;
+  font-family: $font-family;
+  font-size: 14px;
+  font-weight: 500;
+  color: #2239C2;
+  cursor: pointer;
+
+  &:hover { opacity: 0.8; }
+}
+
+.page-content {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}

@@ -1,0 +1,393 @@
+@import '../../../shared/styles/tokens';
+
+.data-table-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+// Bordered container wraps only the table (not the action row)
+.table-border {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #E0E0E0;
+  border-radius: 4px;
+  background: $white;
+}
+
+// ── Action row (above the table border, on the page bg) ──────────────────────
+.actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0 20px 0;
+  flex-shrink: 0;
+  background: transparent;
+}
+
+.actions-row__left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.actions-row__right {
+  display: flex;
+  align-items: center;
+}
+
+// Primary "New event" button — filled blue pill
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 24px;
+  border-radius: 50px;
+  border: none;
+  background: #2239C2;
+  color: #FFFFFF;
+  font-family: $font-family;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+
+  &:hover { opacity: 0.88; }
+}
+
+// Search input
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 240px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #D4D4D4;
+  border-radius: 50px;
+  background: $white;
+
+  &__input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    font-family: $font-family;
+    color: #1A1A1A;
+    background: transparent;
+
+    &::placeholder { color: #9E9E9E; }
+  }
+}
+
+// Filters button — outlined
+.btn-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 40px;
+  padding: 0 20px;
+  border: 1px solid #D4D4D4;
+  border-radius: 50px;
+  background: $white;
+  font-family: $font-family;
+  font-size: 14px;
+  color: #424242;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover { background: #F5F5F5; }
+}
+
+// ── Table container ───────────────────────────────────────────────────────────
+.table-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+// ── Column headers ────────────────────────────────────────────────────────────
+.table__th {
+  height: 48px;
+  padding: 0 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: #424242;
+  white-space: nowrap;
+  background: #E9ECFB;
+  border-bottom: 1px solid #E0E0E0;
+
+  &--gear {
+    width: 56px;
+    text-align: center;
+    padding: 0;
+  }
+}
+
+// ── Rows ─────────────────────────────────────────────────────────────────────
+.table__row {
+  background: $white;
+  cursor: pointer;
+  transition: background 0.1s;
+
+  &:hover { background: #FAFAFA; }
+}
+
+.table__td {
+  height: 56px;
+  padding: 0 16px;
+  font-size: 14px;
+  color: #424242;
+  vertical-align: middle;
+  border-bottom: 1px solid #E0E0E0;
+
+  &--name {
+    min-width: 260px;
+    max-width: 420px;
+  }
+
+  &--text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &--actions {
+    width: 80px;
+    padding: 0 8px;
+    white-space: nowrap;
+    text-align: right;
+  }
+}
+
+// ── Name cell ────────────────────────────────────────────────────────────────
+.cell-name {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #C8D0F5;
+  color: #2239C2;
+  font-size: 13px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cell-name__text {
+  color: #2239C2;
+  font-size: 14px;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// ── Row action buttons ────────────────────────────────────────────────────────
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover { background: #F5F5F5; }
+}
+
+// ── Options dropdown ──────────────────────────────────────────────────────────
+.menu-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.row-menu {
+  position: fixed;
+  z-index: 1000;
+  background: #FFFFFF;
+  border-radius: 4px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.16);
+  min-width: 180px;
+  padding: 8px 0;
+  display: flex;
+  flex-direction: column;
+
+  &__divider {
+    height: 1px;
+    background: #D4D4D4;
+    flex-shrink: 0;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    padding: 0 24px;
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+    color: #1A1A1A;
+    white-space: nowrap;
+    background: none;
+    border: none;
+    text-align: left;
+    width: 100%;
+    cursor: default;
+
+    &--btn {
+      cursor: pointer;
+      &:hover { background: #F5F5F5; }
+    }
+
+    &--disabled {
+      opacity: 0.5;
+    }
+  }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.table__empty {
+  text-align: center;
+  padding: 64px 0;
+  color: #9E9E9E;
+  font-size: 14px;
+}
+
+// ── Selection toolbar ─────────────────────────────────────────────────────────
+.selection-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 48px;
+  padding: 0 16px;
+  background: #2239C2;
+  flex-shrink: 0;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  &__count {
+    font-family: $font-family;
+    font-size: 16px;
+    font-weight: 400;
+    color: #FFFFFF;
+    letter-spacing: 0.15px;
+  }
+
+  &__select-all {
+    background: none;
+    border: none;
+    color: #FFFFFF;
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: underline;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__action {
+    height: 40px;
+    padding: 0 20px;
+    background: transparent;
+    border: none;
+    border-radius: 50px;
+    color: #FFFFFF;
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1.25px;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover { background: rgba(255, 255, 255, 0.12); }
+  }
+}
+
+// ── Checkbox column ───────────────────────────────────────────────────────────
+.table__th--checkbox {
+  width: 48px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.table__td--checkbox {
+  width: 48px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.table__row--selected {
+  background: #F0F2FC;
+
+  &:hover { background: #E9ECFB; }
+}
+
+.table-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #B8B8B8;
+  border-radius: 2px;
+  background: #FFFFFF;
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+  vertical-align: middle;
+
+  &:hover:not(:checked) { border-color: #2239C2; }
+
+  &:checked {
+    background: #2239C2;
+    border-color: #2239C2;
+
+    &::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 0px;
+      width: 5px;
+      height: 9px;
+      border: 2px solid #FFFFFF;
+      border-top: none;
+      border-left: none;
+      transform: rotate(45deg);
+    }
+  }
+}

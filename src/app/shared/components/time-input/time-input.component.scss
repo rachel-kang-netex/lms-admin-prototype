@@ -1,0 +1,42 @@
+@import '../../styles/tokens';
+
+:host {
+  display: block;
+}
+
+.ti-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 48px;
+  padding: 0 12px;
+  background: $white;
+  border: 1px solid $gray-300;
+  border-radius: 4px;
+  gap: 2px;
+
+  &:focus-within { border-color: $primary-500; }
+}
+
+.ti-field {
+  width: 22px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: $font-family;
+  font-size: $font-body-size;
+  color: $gray-900;
+  text-align: center;
+  padding: 0;
+
+  &::placeholder { color: $gray-500; }
+}
+
+.ti-sep {
+  font-family: $font-family;
+  font-size: $font-body-size;
+  color: $gray-900;
+  user-select: none;
+  line-height: 1;
+}

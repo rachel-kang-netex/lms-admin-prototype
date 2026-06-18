@@ -1,0 +1,103 @@
+@import '../../../shared/styles/tokens';
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.field__label {
+  font-family: $font-family;
+  font-size: $font-label-size;
+  font-weight: $font-label-weight;
+  line-height: $font-label-lh;
+  color: $gray-700;
+}
+
+// Shared container shell — same border/radius/bg as Figma "Container"
+.field__container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: $white;
+  border: 1px solid $gray-300;
+  border-radius: 4px;
+  transition: border-color 0.15s;
+
+  &:focus-within {
+    border-color: $primary-500;
+  }
+}
+
+// Text / number input
+.field__input {
+  flex: 1;
+  height: 48px;
+  padding: 0 12px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: $font-family;
+  font-size: $font-label-size;
+  color: $gray-900;
+  width: 100%;
+
+  &::placeholder { color: $gray-500; }
+
+  // hide number spinners
+  &[type='number']::-webkit-inner-spin-button,
+  &[type='number']::-webkit-outer-spin-button { -webkit-appearance: none; }
+  &[type='number'] { -moz-appearance: textfield; }
+}
+
+// Textarea — container height controlled via [style.height] binding
+.field__container--textarea {
+  align-items: flex-start;
+}
+
+.field__textarea {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: $font-family;
+  font-size: $font-label-size;
+  color: $gray-900;
+  resize: none;
+
+  &::placeholder { color: $gray-500; }
+}
+
+// Select
+.field__select {
+  flex: 1;
+  height: 48px;
+  padding: 0 40px 0 12px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: $font-family;
+  font-size: $font-label-size;
+  color: $gray-900;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.field__chevron {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}

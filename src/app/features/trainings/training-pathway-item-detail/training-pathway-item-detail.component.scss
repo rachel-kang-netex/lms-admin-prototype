@@ -1,0 +1,724 @@
+@import '../../../shared/styles/tokens';
+
+// ── Container ─────────────────────────────────────────────────────────────────
+.pathway-item-detail {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+  background: #F4F4F4;
+}
+
+// ── Shared header button ──────────────────────────────────────────────────────
+.hdr-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  &:hover { background: #F5F5F5; }
+}
+
+// ── Top page header ───────────────────────────────────────────────────────────
+.page-header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: $white;
+  border-bottom: 1px solid #E9E9E9;
+  box-shadow: 0 2px 1.5px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+}
+
+// ── Sub-header ────────────────────────────────────────────────────────────────
+.sub-header {
+  height: $header-height;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  background: $white;
+  box-shadow: 0 2px 1.5px rgba(0, 0, 0, 0.08);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: $gray-900;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 480px;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+}
+
+// ── Buttons ───────────────────────────────────────────────────────────────────
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  height: 40px;
+  border-radius: 50px;
+  font-family: $font-family;
+  font-size: $font-btn-size;
+  font-weight: $font-btn-weight;
+  letter-spacing: $font-btn-ls;
+  cursor: pointer;
+  border: none;
+
+  &--primary {
+    background: $primary-500;
+    color: $white;
+
+    &:hover { background: darken($primary-500, 5%); }
+  }
+
+  &--outline {
+    background: $white;
+    border: 1px solid $gray-400;
+    color: $gray-800;
+
+    &:hover { background: $gray-100; }
+  }
+
+  &--ghost { background: $gray-300; color: $gray-800; align-self: flex-start; }
+  &--sm { height: 40px; padding: 0 16px; font-size: $font-label-size; }
+}
+
+
+// ── Body: left menu + right content ──────────────────────────────────────────
+.pathway-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+// ── Left nav sidebar ─────────────────────────────────────────────────────────
+.pathway-menu {
+  width: 250px;
+  flex-shrink: 0;
+  background: $white;
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+  padding: 8px;
+
+  &--expanded { width: 480px; }
+
+  &__toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 8px;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    flex-shrink: 0;
+
+    &:hover { background: rgba(0, 0, 0, 0.05); }
+  }
+
+  &__icon { flex-shrink: 0; }
+
+  &__text {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    flex: 1;
+    min-width: 0;
+
+    &--pathway { color: #3E3E3E; }
+    &--stage   { color: #999999; }
+    &--item    { color: #424242; }
+  }
+
+  &__pathway-outer { padding-left: 0; }
+
+  &__pathway-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    width: 100%;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover { background: rgba(0, 0, 0, 0.05); }
+
+    .pathway-menu__icon { color: #3E3E3E; }
+  }
+
+  &__stage-outer {
+    padding-left: 20px;
+    margin-top: 4px;
+  }
+
+  &__stage-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+
+    .pathway-menu__icon { color: #999999; }
+  }
+
+  &__item-outer { padding-left: 40px; }
+
+  &__item-inner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    width: 100%;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    text-align: left;
+
+    &:hover { background: rgba(0, 0, 0, 0.1); }
+
+    &--active {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .pathway-menu__icon { color: #9E9E9E; }
+  }
+}
+
+// ── Right content container ───────────────────────────────────────────────────
+.pathway-item-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow-y: auto;
+  min-width: 0;
+}
+
+// ── Card header (item title + see event link) ─────────────────────────────────
+.item-card-header {
+  padding: 32px 32px 0;
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.item-title-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.item-title {
+  font-family: $font-family;
+  font-size: 24px;
+  font-weight: 500;
+  color: $gray-900;
+  line-height: 32px;
+  margin: 0;
+  letter-spacing: 0.1px;
+
+  .item-title-prefix {
+    color: $gray-500;
+    font-weight: 400;
+  }
+}
+
+.see-item-link {
+  display: inline-flex;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: $font-family;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.25px;
+  color: $primary-500;
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: nowrap;
+
+  &:hover { opacity: 0.8; }
+
+  &--disabled {
+    cursor: default;
+    opacity: 1;
+    &:hover { opacity: 1; }
+  }
+}
+
+// ── Card body (main scrollable content) ──────────────────────────────────────
+.item-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 32px 32px 0;
+  min-height: 0;
+}
+
+// ── Actions row ───────────────────────────────────────────────────────────────
+.item-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  height: 40px;
+
+  &__filters {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: $gray-800;
+  }
+}
+
+// ── Multiple-sessions checkbox row ────────────────────────────────────────────
+.sessions-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  input[type="checkbox"] {
+    margin-top: 2px;
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  label {
+    font-family: $font-family;
+    font-size: 14px;
+    font-weight: 400;
+    color: $gray-700;
+    line-height: 18px;
+    cursor: pointer;
+  }
+}
+
+// ── Sessions table ────────────────────────────────────────────────────────────
+.sessions-table-wrap {
+  overflow-x: auto;
+  border-radius: 4px;
+  background: $white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+.sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: $font-family;
+
+  &__th {
+    height: 48px;
+    padding: 0 16px;
+    text-align: left;
+    font-size: 13px;
+    font-weight: 500;
+    color: #424242;
+    background: #E9ECFB;
+    border-bottom: 1px solid #D4D4D4;
+    white-space: nowrap;
+  }
+
+  &__row {
+    background: $white;
+    &:hover td { background: #FAFAFA; }
+  }
+
+  &__td {
+    height: 48px;
+    padding: 0 16px;
+    font-size: 14px;
+    color: $gray-900;
+    border-bottom: 1px solid #D4D4D4;
+    white-space: nowrap;
+    vertical-align: middle;
+
+    &--muted { color: $gray-600; }
+  }
+
+  &__empty {
+    padding: 32px 16px;
+    text-align: center;
+    font-size: 14px;
+    color: $gray-500;
+  }
+}
+
+// ── Session name cell (calendar icon + blue link) ─────────────────────────────
+.session-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  &__icon { flex-shrink: 0; }
+}
+
+
+// ── Scheduled-modules cell (count + status icon) ──────────────────────────────
+.scheduled-modules-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modules-icon {
+  flex-shrink: 0;
+}
+
+// ── Trainer cell ──────────────────────────────────────────────────────────────
+.trainer-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
+  &__name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    color: $gray-900;
+  }
+}
+
+.trainer-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #E9ECFB;
+  color: $primary-500;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+// ── Link button ───────────────────────────────────────────────────────────────
+.link-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: $font-family;
+  font-size: 14px;
+  color: $primary-500;
+  cursor: pointer;
+
+  &:hover { text-decoration: underline; }
+}
+
+// ── Icon button (table row 3-dot) ─────────────────────────────────────────────
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+
+  &:hover { background: $gray-100; }
+}
+
+// ── New session side panel form ───────────────────────────────────────────────
+.event-form {
+  padding: 0;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 40px 32px;
+}
+
+.form-section__texts {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form-section__title {
+  font-size: $font-h2-size;
+  font-weight: $font-h2-weight;
+  letter-spacing: $font-h2-ls;
+  color: $gray-900;
+  line-height: $font-h2-lh;
+}
+
+.form-section__subtitle {
+  font-size: $font-body-size;
+  font-weight: $font-body-weight;
+  color: $gray-600;
+  line-height: $font-body-lh;
+}
+
+.form-divider {
+  border: none;
+  border-top: 1px solid $gray-300;
+  margin: 0 32px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+
+  &--shrink { flex-shrink: 0; width: 160px; }
+
+  &__label {
+    font-size: $font-label-size;
+    font-weight: $font-label-weight;
+    color: $gray-700;
+    line-height: $font-label-lh;
+
+    &--bold {
+      font-size: $font-h3-size;
+      font-weight: $font-h3-weight;
+      color: $gray-900;
+      letter-spacing: $font-h3-ls;
+    }
+  }
+
+  &__input {
+    height: 48px;
+    padding: 0 12px;
+    border: 1px solid $gray-300;
+    border-radius: 4px;
+    background: $white;
+    font-size: $font-body-size;
+    color: $gray-900;
+    outline: none;
+    width: 100%;
+
+    &:focus { border-color: $primary-500; }
+    &--sm { width: 64px; max-width: 64px; flex: none; }
+  }
+
+  &__select-wrap {
+    position: relative;
+
+    &--sm { width: 100px; }
+  }
+
+  &__select {
+    appearance: none;
+    width: 100%;
+    height: 48px;
+    padding: 0 40px 0 12px;
+    border: 1px solid $gray-300;
+    border-radius: 4px;
+    background: $white;
+    font-size: $font-body-size;
+    color: $gray-900;
+    cursor: pointer;
+    outline: none;
+
+    &:focus { border-color: $primary-500; }
+    &:disabled { background: $gray-100; opacity: 0.6; cursor: default; }
+  }
+
+  &__chevron {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: $gray-800;
+  }
+
+  &__unit {
+    font-size: $font-body-size;
+    color: $gray-700;
+    white-space: nowrap;
+  }
+}
+
+// ── Toggle ────────────────────────────────────────────────────────────────────
+.form-toggle-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+
+  &__label {
+    font-size: $font-h3-size;
+    font-weight: $font-h3-weight;
+    letter-spacing: $font-h3-ls;
+    color: $gray-900;
+    line-height: $font-h3-lh;
+    margin-bottom: 4px;
+  }
+
+  &__desc {
+    font-size: $font-body-size;
+    color: $gray-600;
+    line-height: $font-body-lh;
+  }
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+  flex-shrink: 0;
+
+  input { opacity: 0; width: 0; height: 0; position: absolute; }
+
+  &__track {
+    position: absolute;
+    inset: 0;
+    background: $gray-400;
+    border-radius: 20px;
+    transition: background 0.2s;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: $white;
+      top: 3px;
+      left: 3px;
+      transition: left 0.2s;
+    }
+  }
+
+  input:checked + .toggle__track {
+    background: $primary-500;
+
+    &::after { left: 17px; }
+  }
+}
+
+// ── Info card ─────────────────────────────────────────────────────────────────
+.info-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #EBEBEB;
+  border-radius: 8px;
+  padding: 20px;
+
+  &__body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: 14px;
+    font-weight: 500;
+    color: $gray-900;
+    line-height: 20px;
+    margin: 0;
+  }
+
+  &__desc {
+    font-size: 13px;
+    font-weight: 400;
+    color: $gray-700;
+    line-height: 18px;
+    margin: 0;
+  }
+
+  &__link {
+    color: $primary-500;
+    text-decoration: underline;
+  }
+
+  &__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+  }
+}
+
+// ── Closing date inline row ───────────────────────────────────────────────────
+.closing-date-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.form-row--inline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+// ── Placeholders ──────────────────────────────────────────────────────────────
+.empty-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 24px;
+  color: $gray-500;
+  font-family: $font-family;
+  font-size: 14px;
+}
+
+.not-found {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: $gray-500;
+  font-family: $font-family;
+  font-size: 14px;
+}

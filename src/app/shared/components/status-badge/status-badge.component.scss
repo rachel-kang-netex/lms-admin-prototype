@@ -1,0 +1,70 @@
+@import '../../../shared/styles/tokens';
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  flex-shrink: 0;
+
+  // Green — positive / complete
+  &--open,
+  &--published,
+  &--completed,
+  &--ongoing,
+  &--active {
+    background: #DCEDC8;
+    border-color: #285318;
+    color: #285318;
+  }
+
+  // Blue — in progress / ended
+  &--ended,
+  &--in-progress {
+    background: #E9ECFB;
+    border-color: $primary-500;
+    color: $primary-500;
+  }
+
+  // Red — negative / error
+  &--closed,
+  &--not-completed,
+  &--unpublished {
+    background: #F9C8D0;
+    border-color: #971127;
+    color: #971127;
+  }
+
+  // Amber — needs attention
+  &--pending {
+    background: #FFE0B2;
+    border-color: #802D00;
+    color: #802D00;
+  }
+
+  // Gray — neutral / inactive
+  &--draft,
+  &--not-started {
+    background: #D4D4D4;
+    border-color: #3E3E3E;
+    color: #3E3E3E;
+  }
+
+  // Purple — extra info / special
+  &--scheduled {
+    background: #EFE4FC;
+    border-color: #771AE2;
+    color: #771AE2;
+  }
+
+  // Blue — feature label
+  &--new {
+    background: #E9ECFB;
+    border-color: $primary-500;
+    color: $primary-500;
+  }
+}

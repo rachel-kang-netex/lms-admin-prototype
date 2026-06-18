@@ -1,0 +1,558 @@
+<div class="detail-page" *ngIf="session; else notFound">
+
+  <!-- ── Top header ── -->
+  <div class="page-header">
+    <button class="hdr-btn" title="Menu">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="#3E3E3E" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <button class="hdr-btn" title="User">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="4" stroke="#3E3E3E" stroke-width="1.5"/>
+        <path d="M4 20c0-4 3.58-7 8-7s8 3 8 7" stroke="#3E3E3E" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- ── Sub-header ── -->
+  <div class="sub-header">
+    <div class="sub-header__left">
+      <button class="hdr-btn" (click)="goBack()" title="Back">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M19 12H5M12 5l-7 7 7 7" stroke="#3E3E3E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <span class="sub-header__title">{{ session.code }} - {{ session.name }}</span>
+      <app-status-badge [status]="session.status"></app-status-badge>
+    </div>
+    <div class="sub-header__actions">
+      <button class="btn btn--outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+          <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        Enrollment
+      </button>
+      <button class="hdr-btn" title="More options">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="5" r="1.2" fill="#3E3E3E"/>
+          <circle cx="12" cy="12" r="1.2" fill="#3E3E3E"/>
+          <circle cx="12" cy="19" r="1.2" fill="#3E3E3E"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Content ── -->
+  <div class="detail-content">
+    <div class="detail-inner">
+
+      <!-- Title row -->
+      <div class="title-row">
+        <h1 class="training-title">{{ trainingName }}</h1>
+        <button class="see-event-link" (click)="goToTrainingEvent()">SEE EVENT</button>
+      </div>
+
+      <!-- Tabs -->
+      <div class="tabs-bar">
+        <button class="detail-tab" [class.detail-tab--active]="activeTab === 'modules'" (click)="setTab('modules')">Modules</button>
+        <button class="detail-tab" [class.detail-tab--active]="activeTab === 'learners'" (click)="setTab('learners')">Learners</button>
+        <button class="detail-tab" [class.detail-tab--active]="activeTab === 'trainers'" (click)="setTab('trainers')">Trainers</button>
+      </div>
+
+      <!-- Modules tab -->
+      <ng-container *ngIf="activeTab === 'modules'">
+        <div class="tab-actions">
+          <div class="sched-module-btn-wrap">
+            <button class="btn btn--primary" (click)="toggleScheduleDropdown($event)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M3 9h18M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Schedule modules
+            </button>
+            <div class="sched-module-dropdown" *ngIf="scheduleDropdownOpen" (click)="$event.stopPropagation()">
+              <div class="sched-module-dropdown__header">Choose module to schedule:</div>
+              <button
+                class="sched-module-dropdown__item"
+                *ngFor="let mod of localModules"
+                (click)="selectModuleToSchedule(mod)"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="4" width="18" height="18" rx="2" stroke="#707070" stroke-width="1.5"/>
+                  <path d="M3 9h18M8 2v4M16 2v4" stroke="#707070" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <span>{{ mod.name }}</span>
+              </button>
+            </div>
+          </div>
+          <button class="btn-filters">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M4 6h16M7 12h10M10 18h4" stroke="#424242" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Filters
+          </button>
+        </div>
+
+        <div class="modules-table-wrap">
+          <div class="selection-toolbar" *ngIf="selectedModuleIndices.size > 0">
+            <div class="selection-toolbar__left">
+              <span class="selection-toolbar__count">{{ selectedModuleIndices.size }} item{{ selectedModuleIndices.size !== 1 ? 's' : '' }} selected</span>
+              <button class="selection-toolbar__select-all" (click)="selectAllModules()">Select all</button>
+            </div>
+            <div class="selection-toolbar__right">
+              <button class="selection-toolbar__action">Delete</button>
+            </div>
+          </div>
+          <table class="modules-table">
+            <thead>
+              <tr>
+                <th class="modules-table__th" style="width:48px">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="allModulesSelected"
+                         (change)="toggleAllModules()">
+                </th>
+                <th class="modules-table__th">Module</th>
+                <th class="modules-table__th" style="width:120px">Status</th>
+                <th class="modules-table__th" style="width:220px">Date and time</th>
+                <th class="modules-table__th" style="width:120px">Duration</th>
+                <th class="modules-table__th" style="width:120px">Attendance</th>
+                <th class="modules-table__th" style="width:160px">Trainer</th>
+                <th class="modules-table__th" style="width:48px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let mod of localModules; let i = index" class="modules-table__row">
+                <td class="modules-table__td" style="text-align:center">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="selectedModuleIndices.has(i)"
+                         (change)="toggleModuleSelection(i)">
+                </td>
+                <td class="modules-table__td">
+                  <div class="module-cell">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="4" width="18" height="18" rx="2" stroke="#707070" stroke-width="1.5"/>
+                      <path d="M3 9h18M8 2v4M16 2v4" stroke="#707070" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span class="module-cell__name">{{ mod.name }}</span>
+                  </div>
+                </td>
+                <td class="modules-table__td">
+                  <app-status-badge [status]="getComputedModuleStatus(mod)"></app-status-badge>
+                </td>
+                <td class="modules-table__td">
+                  <ng-container *ngIf="getComputedModuleStatus(mod) !== 'PENDING'; else pendingTpl">
+                    <span class="module-datetime">{{ formatModuleDateTime(mod) }}</span>
+                  </ng-container>
+                  <ng-template #pendingTpl>
+                    <button type="button" class="pending-schedule" (click)="openSchedulePanel(mod)">
+                      <span>Pending schedule</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                        <path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#F59E0B" stroke-width="1.5" stroke-linejoin="round"/>
+                        <path d="M12 9v4M12 17h.01" stroke="#F59E0B" stroke-width="1.5" stroke-linecap="round"/>
+                      </svg>
+                    </button>
+                  </ng-template>
+                </td>
+                <td class="modules-table__td modules-table__td--muted">
+                  {{ mod.duration != null ? mod.duration + ' mins' : '-' }}
+                </td>
+                <td class="modules-table__td modules-table__td--muted">-</td>
+                <td class="modules-table__td modules-table__td--muted">-</td>
+                <td class="modules-table__td">
+                  <button class="icon-btn" title="More options">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="5" r="1.5" fill="#9E9E9E"/>
+                      <circle cx="12" cy="12" r="1.5" fill="#9E9E9E"/>
+                      <circle cx="12" cy="19" r="1.5" fill="#9E9E9E"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="localModules.length === 0">
+                <td colspan="8" class="modules-table__empty">No modules found.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </ng-container>
+
+      <!-- Learners tab -->
+      <ng-container *ngIf="activeTab === 'learners'">
+        <div class="tab-actions">
+          <div class="tab-actions__left">
+            <button class="btn btn--primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Generate report
+            </button>
+            <div class="search-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="7" stroke="#9E9E9E" stroke-width="1.5"/>
+                <path d="M16.5 16.5L21 21" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <input type="text" class="search-box__input" placeholder="Search" />
+            </div>
+          </div>
+          <button class="btn-filters">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M4 6h16M7 12h10M10 18h4" stroke="#424242" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Filters
+          </button>
+        </div>
+
+        <div class="modules-table-wrap">
+          <div class="selection-toolbar" *ngIf="selectedLearnerIds.size > 0">
+            <div class="selection-toolbar__left">
+              <span class="selection-toolbar__count">{{ selectedLearnerIds.size }} item{{ selectedLearnerIds.size !== 1 ? 's' : '' }} selected</span>
+              <button class="selection-toolbar__select-all" (click)="selectAllLearners()">Select all</button>
+            </div>
+            <div class="selection-toolbar__right">
+              <button class="selection-toolbar__action" (click)="openManagePanel()">Manage</button>
+            </div>
+          </div>
+          <table class="modules-table">
+            <thead>
+              <tr>
+                <th class="modules-table__th" style="width:48px">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="allLearnersSelected"
+                         (change)="toggleAllLearners()">
+                </th>
+                <th class="modules-table__th">Student Name</th>
+                <th class="modules-table__th" style="width:120px">Attendance</th>
+                <th class="modules-table__th" style="width:130px">Time spent</th>
+                <th class="modules-table__th" style="width:160px">Evaluation grade</th>
+                <th class="modules-table__th" style="width:180px">Completion status</th>
+                <th class="modules-table__th" style="width:48px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let learner of localLearners" class="modules-table__row">
+                <td class="modules-table__td" style="text-align:center">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="selectedLearnerIds.has(learner.id)"
+                         (change)="toggleLearnerSelection(learner.id)">
+                </td>
+                <td class="modules-table__td">
+                  <div class="learner-cell">
+                    <div class="learner-avatar">{{ getInitials(learner.name) }}</div>
+                    <span class="learner-cell__name">{{ learner.name }}</span>
+                  </div>
+                </td>
+                <td class="modules-table__td modules-table__td--muted">{{ learner.attendance }}</td>
+                <td class="modules-table__td modules-table__td--muted">{{ learner.timeSpent }}</td>
+                <td class="modules-table__td modules-table__td--muted">
+                  {{ (learnerGradeOverrides.get(learner.id) ?? learner.evaluationGrade) ?? '-' }}
+                </td>
+                <td class="modules-table__td">
+                  <app-status-badge [status]="getLearnerCompletionStatus(learner)"></app-status-badge>
+                </td>
+                <td class="modules-table__td">
+                  <button class="icon-btn" title="More options" (click)="toggleLearnerMenu($event, learner.id)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="5" r="1.5" fill="#9E9E9E"/>
+                      <circle cx="12" cy="12" r="1.5" fill="#9E9E9E"/>
+                      <circle cx="12" cy="19" r="1.5" fill="#9E9E9E"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="localLearners.length === 0">
+                <td colspan="7" class="modules-table__empty" style="text-align:center">No learners enrolled yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="learner-menu-dropdown"
+             *ngIf="openLearnerMenuId !== null"
+             [style.top.px]="learnerMenuPosition.top"
+             [style.right.px]="learnerMenuPosition.right"
+             (click)="$event.stopPropagation()">
+          <button class="learner-menu-dropdown__item" (click)="openManagePanel()">
+            Manage
+          </button>
+        </div>
+      </ng-container>
+
+      <!-- Trainers tab -->
+      <ng-container *ngIf="activeTab === 'trainers'">
+        <div class="tab-actions">
+          <div class="tab-actions__left">
+            <button class="btn btn--primary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/>
+                <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              Add trainers
+            </button>
+            <div class="search-box">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                <circle cx="11" cy="11" r="7" stroke="#9E9E9E" stroke-width="1.5"/>
+                <path d="M16.5 16.5L21 21" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <input type="text" class="search-box__input" placeholder="Search" />
+            </div>
+          </div>
+          <button class="btn-filters">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M4 6h16M7 12h10M10 18h4" stroke="#424242" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Filters
+          </button>
+        </div>
+
+        <div class="modules-table-wrap">
+          <div class="selection-toolbar" *ngIf="selectedTrainerIds.size > 0">
+            <div class="selection-toolbar__left">
+              <span class="selection-toolbar__count">{{ selectedTrainerIds.size }} item{{ selectedTrainerIds.size !== 1 ? 's' : '' }} selected</span>
+              <button class="selection-toolbar__select-all" (click)="selectAllTrainers()">Select all</button>
+            </div>
+            <div class="selection-toolbar__right">
+              <button class="selection-toolbar__action">Remove</button>
+            </div>
+          </div>
+          <table class="modules-table">
+            <thead>
+              <tr>
+                <th class="modules-table__th" style="width:48px">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="allTrainersSelected"
+                         (change)="toggleAllTrainers()">
+                </th>
+                <th class="modules-table__th">Trainer name</th>
+                <th class="modules-table__th" style="width:48px"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let trainer of localTrainers" class="modules-table__row">
+                <td class="modules-table__td" style="text-align:center">
+                  <input type="checkbox" class="learner-checkbox"
+                         [checked]="selectedTrainerIds.has(trainer.id)"
+                         (change)="toggleTrainerSelection(trainer.id)">
+                </td>
+                <td class="modules-table__td">
+                  <div class="learner-cell">
+                    <div class="learner-avatar">{{ getInitials(trainer.name) }}</div>
+                    <span class="learner-cell__name">{{ trainer.name }}</span>
+                  </div>
+                </td>
+                <td class="modules-table__td">
+                  <button class="icon-btn" title="More options" (click)="toggleTrainerMenu($event, trainer.id)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <circle cx="12" cy="5" r="1.5" fill="#5C5C5C"/>
+                      <circle cx="12" cy="12" r="1.5" fill="#5C5C5C"/>
+                      <circle cx="12" cy="19" r="1.5" fill="#5C5C5C"/>
+                    </svg>
+                  </button>
+                </td>
+              </tr>
+
+              <tr *ngIf="localTrainers.length === 0">
+                <td colspan="3" class="modules-table__empty">No trainers assigned yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="trainer-menu-dropdown"
+             *ngIf="openTrainerMenuId !== null"
+             [style.top.px]="dropdownPosition.top"
+             [style.right.px]="dropdownPosition.right"
+             (click)="$event.stopPropagation()">
+          <button class="trainer-menu-dropdown__item trainer-menu-dropdown__item--danger"
+                  (click)="removeTrainer(openTrainerMenuId!)">
+            Remove
+          </button>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>
+</div>
+
+<ng-template #notFound>
+  <div class="not-found">Session not found.</div>
+</ng-template>
+
+<app-narrow-panel
+  title="Manage learners"
+  saveLabel="Save"
+  [open]="managePanelOpen"
+  (save)="saveManagePanel()"
+  (closed)="closeManagePanel()"
+>
+  <div class="manage-form">
+
+    <div class="manage-section">
+      <h3 class="manage-section__title">Evaluation</h3>
+
+      <div class="form-field">
+        <label class="form-field__label">Marks</label>
+        <input class="form-field__input" type="text"
+               [ngModel]="manageMarks"
+               (ngModelChange)="onManageMarksChange($event)" />
+      </div>
+
+      <div class="form-field">
+        <label class="form-field__label">Remarks</label>
+        <input class="form-field__input" type="text"
+               [(ngModel)]="manageRemarks"
+               placeholder="Enter your remarks here" />
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <div class="manage-section">
+      <div class="form-toggle-row">
+        <div class="form-toggle-row__text">
+          <p class="form-toggle-row__label">Determine completion status manually</p>
+          <p class="form-toggle-row__desc">The completion status of this event is updated automatically based on attendance. Use this section for exceptions.</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox"
+                 [ngModel]="manageManualCompletion"
+                 (ngModelChange)="onManageManualCompletionChange($event)" />
+          <span class="toggle__track"></span>
+        </label>
+      </div>
+
+      <app-ui-select
+        *ngIf="manageManualCompletion"
+        label="Completion status"
+        [options]="completionStatusOptions"
+        [ngModel]="manageCompletionStatus"
+        (ngModelChange)="onManageCompletionStatusChange($event)"
+        name="manageCompletionStatus"
+      ></app-ui-select>
+    </div>
+
+  </div>
+</app-narrow-panel>
+
+<app-side-panel
+  [title]="'Schedule module: ' + (schedulingModule?.name || '')"
+  [open]="schedulePanelOpen"
+  (save)="saveSchedule()"
+  (cancel)="closeSchedulePanel()"
+>
+  <div class="schedule-form">
+
+    <div class="sched-section">
+      <div class="form-field">
+        <label class="form-field__label">Trainers (if any)</label>
+        <div class="chip-list">
+          <button type="button" class="btn-flat">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path d="M12 5v14M5 12h14" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Assign trainers
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="sched-section sched-section--compact">
+      <div class="form-field">
+        <label class="form-field__label">Location</label>
+        <input class="form-field__input" type="text" [(ngModel)]="scheduleLocation" />
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <div class="sched-section">
+      <div class="sched-heading">
+        <p class="sched-heading__title">Slots</p>
+        <p class="sched-heading__desc">Use slots to divide a module into smaller time blocks where necessary.</p>
+      </div>
+
+      <div class="slot-row" *ngFor="let slot of scheduleSlots; let i = index">
+        <div class="slot-group">
+          <span class="form-field__label">Start time*</span>
+          <div class="slot-inputs">
+            <app-date-picker [(ngModel)]="slot.startDate"></app-date-picker>
+            <app-time-input [(ngModel)]="slot.startTime"></app-time-input>
+          </div>
+        </div>
+        <div class="slot-arrow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14M12 5l7 7-7 7" stroke="#5C5C5C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="slot-group">
+          <span class="form-field__label">End time*</span>
+          <div class="slot-inputs">
+            <app-date-picker [(ngModel)]="slot.endDate"></app-date-picker>
+            <app-time-input [(ngModel)]="slot.endTime"></app-time-input>
+          </div>
+        </div>
+        <button type="button" class="icon-btn" (click)="removeSlot(i)" title="Remove slot">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M18 6L6 18M6 6l12 12" stroke="#707070" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <button type="button" class="btn-flat" (click)="addSlot()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 5v14M5 12h14" stroke="#3E3E3E" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Add slot
+      </button>
+    </div>
+
+    <hr class="form-divider" />
+
+    <div class="sched-section">
+      <div class="form-toggle-row">
+        <div class="form-toggle-row__text">
+          <p class="form-toggle-row__label">Create an event on Microsoft Teams</p>
+          <p class="form-toggle-row__desc">Note that activating this option prevents users from registering per group.</p>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" [(ngModel)]="teamsEnabled" />
+          <span class="toggle__track"></span>
+        </label>
+      </div>
+
+      <label class="form-check">
+        <input type="checkbox" [(ngModel)]="autoVirtualRoom" />
+        <span>Create the event with an associated virtual room URL automatically</span>
+        <span class="form-check__help">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="#9E9E9E" stroke-width="1.5"/>
+            <path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" stroke="#9E9E9E" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </span>
+      </label>
+
+      <div class="form-field">
+        <label class="form-field__label">Virtual room URL (if any)</label>
+        <input class="form-field__input" type="text" [(ngModel)]="virtualRoomUrl" placeholder="Enter the URL here" />
+      </div>
+    </div>
+
+    <hr class="form-divider" />
+
+    <div class="sched-section sched-section--compact">
+      <label class="form-check">
+        <input type="checkbox" [(ngModel)]="sendReminder" />
+        <span>Send a reminder email</span>
+        <input class="reminder-days" type="number" [(ngModel)]="reminderDays" min="1" />
+        <span>days in advance</span>
+      </label>
+    </div>
+
+  </div>
+</app-side-panel>

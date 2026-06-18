@@ -1,0 +1,13 @@
+<div class="field">
+  <label class="field__label" *ngIf="label">{{ label }}</label>
+  <div class="field__container field__container--textarea" [style.height]="height">
+    <textarea
+      class="field__textarea"
+      [placeholder]="placeholder"
+      [value]="value"
+      [disabled]="isDisabled"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+    ></textarea>
+  </div>
+</div>

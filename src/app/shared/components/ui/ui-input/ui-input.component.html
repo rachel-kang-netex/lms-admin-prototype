@@ -1,0 +1,14 @@
+<div class="field">
+  <label class="field__label" *ngIf="label">{{ label }}</label>
+  <div class="field__container">
+    <input
+      class="field__input"
+      [type]="type"
+      [placeholder]="placeholder"
+      [value]="value"
+      [disabled]="isDisabled"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+    />
+  </div>
+</div>

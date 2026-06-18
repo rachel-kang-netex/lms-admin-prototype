@@ -1,0 +1,24 @@
+<div class="ti-wrap">
+  <input
+    class="ti-field"
+    type="text"
+    inputmode="numeric"
+    maxlength="2"
+    placeholder="--"
+    [value]="hh"
+    (input)="onHhInput($event)"
+    (blur)="onHhBlur()"
+  />
+  <span class="ti-sep">:</span>
+  <input
+    class="ti-field"
+    type="text"
+    inputmode="numeric"
+    maxlength="2"
+    placeholder="--"
+    [value]="mm"
+    (input)="onMmInput($event)"
+    (blur)="onMmBlur()"
+    #mmRef
+  />
+</div>
